@@ -1,0 +1,46 @@
+---
+- name: Set timezone to Madrid
+  community.general.timezone:
+    name: Europe/Madrid
+
+- name: Update packages
+  apt:
+    update_cache: yes
+
+- name: Install required packages for Docker
+  apt:
+    name: "{{ packages }}"
+    state: latest
+
+- name: Add Docker gpg key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker official repo for Ubuntu 20.04 (focal)
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+    state: present
+
+- name: Update packages
+  apt:
+    update_cache: yes
+
+- name: Install Docker
+  apt:
+    name: docker-ce
+    state: latest
+
+- name: Install Docker compose
+  apt:
+    name: docker-compose
+    state: latest
+
+- name: Add user to docker group
+  user:
+    name: "{{ ansible_env.USER }}"
+    groups: docker
+    append: yes
+
+- name: Reset connection
+  meta: reset_connection

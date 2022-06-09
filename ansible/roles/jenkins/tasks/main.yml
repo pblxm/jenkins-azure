@@ -1,0 +1,17 @@
+---
+- name: Create directories
+  file:
+    path: "{{ ansible_env.PWD }}/jenkins"
+    state: directory
+  loop:
+    - "{{ ansible_env.PWD }}/jenkins"
+    - "{{ ansible_env.PWD }}/jenkins/configuration"
+
+- name: Copy compose folder to host
+  copy:
+    src: "docker-compose.yml"
+    dest: "{{ ansible_env.PWD }}/jenkins"
+
+- name: Deploy the Docker compose
+  docker_compose:
+    project_src: "{{ ansible_env.PWD }}/jenkins"

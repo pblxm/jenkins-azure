@@ -1,0 +1,5 @@
+logs/
+.terraform*
+certs/
+*.crt
+*.key
